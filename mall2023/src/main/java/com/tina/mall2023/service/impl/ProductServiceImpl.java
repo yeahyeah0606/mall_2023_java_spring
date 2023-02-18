@@ -2,6 +2,7 @@ package com.tina.mall2023.service.impl;
 
 import com.tina.mall2023.constant.ProductCategory;
 import com.tina.mall2023.dao.ProductDao;
+import com.tina.mall2023.dto.ProductQueryParams;
 import com.tina.mall2023.dto.ProductRequest;
 import com.tina.mall2023.model.Product;
 import com.tina.mall2023.service.ProductService;
@@ -16,8 +17,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao;
 
     @Override
-    public List<Product> getProducts(ProductCategory category, String search) {
-        return productDao.getProducts(category, search);
+    public List<Product> getProducts(ProductQueryParams productQueryParams) {
+        return productDao.getProducts(productQueryParams);
     }
 
     @Override
