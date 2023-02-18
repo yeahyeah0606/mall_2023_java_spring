@@ -20,6 +20,17 @@ import java.util.Map;
 public class ProductDaoImpl implements ProductDao {
     @Autowired
     private NamedParameterJdbcTemplate npjt;
+
+    @Override
+    public List<Product> getProducts() {
+        String sql ="SELECT product_id,product_name, category, image_url," +
+                " price, stock, description, created_date, last_modified_date  " +
+                "from product";
+        Map<String, Object> map = new HashMap<>();
+        List<Product> productList = npjt.query(sql, map, new ProductRowMapper());
+        return productList;
+    }
+
     @Override
     public Product getProductById(Integer productID) {
         String sql ="SELECT product_id,product_name, category, image_url," +
