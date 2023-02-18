@@ -78,4 +78,12 @@ public class ProductDaoImpl implements ProductDao {
         map.put("lastModifiedDate", new Date());
         npjt.update(sql, map);
     }
+
+    @Override
+    public void deleteProductById(Integer productID) {
+        String sql = "DELETE FROM product WHERE product_id=:productID";
+        Map<String, Object> map = new HashMap<>();
+        map.put("productID", productID);
+        npjt.update(sql, map);
+    }
 }
