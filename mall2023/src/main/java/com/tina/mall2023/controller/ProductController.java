@@ -1,5 +1,6 @@
 package com.tina.mall2023.controller;
 
+import com.tina.mall2023.constant.ProductCategory;
 import com.tina.mall2023.dto.ProductRequest;
 import com.tina.mall2023.model.Product;
 import com.tina.mall2023.service.ProductService;
@@ -16,8 +17,10 @@ public class ProductController {
     @Autowired
     private ProductService productService;
     @GetMapping("/products")
-    public  ResponseEntity<List<Product>> getProducts(){
-        List<Product> productList = productService.getProducts();
+    public  ResponseEntity<List<Product>> getProducts(
+            @RequestParam(required = false) ProductCategory category,
+            @RequestParam(required = false) String search ){
+        List<Product> productList = productService.getProducts(category, search);
         return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
     @GetMapping("/products/{productId}")
