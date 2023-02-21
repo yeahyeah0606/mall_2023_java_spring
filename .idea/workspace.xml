@@ -11,6 +11,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="2LtzJRi32SnAG3IaGRwo9lynvxL" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -20,6 +21,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "F:/new_java_spring_0221/mall2023",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -32,6 +34,7 @@
       <option name="presentableId" value="Default" />
       <updated>1676705094643</updated>
       <workItem from="1676705095794" duration="18000" />
+      <workItem from="1676944743841" duration="166000" />
     </task>
     <servers />
   </component>
