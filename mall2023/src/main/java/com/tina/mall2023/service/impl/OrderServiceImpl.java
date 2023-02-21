@@ -5,6 +5,7 @@ import com.tina.mall2023.dao.ProductDao;
 import com.tina.mall2023.dao.UserDao;
 import com.tina.mall2023.dto.BuyItem;
 import com.tina.mall2023.dto.CreateOrderRequest;
+import com.tina.mall2023.dto.OrderQueryParams;
 import com.tina.mall2023.model.Order;
 import com.tina.mall2023.model.OrderItem;
 import com.tina.mall2023.model.Product;
@@ -30,6 +31,25 @@ public class OrderServiceImpl implements OrderService {
     private ProductDao productDao;
     @Autowired
     private UserDao userDao;
+
+    @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+        return orderDao.countOrder(orderQueryParams);
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+        List<Order> orderList = orderDao.getOrders(orderQueryParams);
+
+        for(Order order : orderList ){
+            List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderID(order.getOrderID());
+
+            order.setOrderItemList(orderItemList);
+        }
+
+        return orderList;
+    }
+
     @Transactional
     @Override
     public Integer createOrder(Integer userID, CreateOrderRequest createOrderRequest) {

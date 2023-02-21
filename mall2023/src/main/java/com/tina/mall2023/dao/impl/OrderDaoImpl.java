@@ -1,6 +1,7 @@
 package com.tina.mall2023.dao.impl;
 
 import com.tina.mall2023.dao.OrderDao;
+import com.tina.mall2023.dto.OrderQueryParams;
 import com.tina.mall2023.model.Order;
 import com.tina.mall2023.model.OrderItem;
 import com.tina.mall2023.rowmapper.OrderItemRowMapper;
@@ -77,7 +78,7 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public Order getOrderById(Integer orderID) {
         String sql="SELECT order_id, user_id, total_amount, created_date, last_modified_date " +
-                "FROM `order` WHERE order_id = :orderID";
+                "FROM `order` WHERE order_id = :orderID ";
         Map<String, Object> map = new HashMap<>();
         map.put("orderID", orderID);
         List<Order> orderList = npjt.query(sql, map, new OrderRowMapper());
@@ -101,5 +102,42 @@ public class OrderDaoImpl implements OrderDao {
 
         List<OrderItem> orderItemList = npjt.query(sql, map, new OrderItemRowMapper());
         return orderItemList;
+    }
+
+    @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+        String sql = "SELECT count(*) FROM `order` WHERE 1=1 ";
+        Map<String, Object> map = new HashMap<>();
+        // 查詢條件
+        sql = addFilteringSql(sql, map, orderQueryParams);
+
+        Integer total = npjt.queryForObject(sql, map, Integer.class);
+        return total;
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+        String sql = "SELECT order_id, user_id, total_amount, created_date, last_modified_date FROM `order` WHERE 1=1 ";
+        Map<String, Object> map = new HashMap<>();
+        // 查詢條件
+        sql = addFilteringSql(sql, map, orderQueryParams);
+        //排序
+        sql = sql + " ORDER BY created_date DESC ";
+        //分頁
+        sql =sql +" LIMIT :limit OFFSET :offset ";
+        map.put("limit", orderQueryParams.getLimit());
+        map.put("offset", orderQueryParams.getOffset());
+
+
+        List<Order> orderList = npjt.query(sql, map, new OrderRowMapper());
+        return orderList;
+    }
+
+    private String addFilteringSql(String sql, Map<String, Object> map, OrderQueryParams orderQueryParams){
+        if(orderQueryParams.getUserID() != null ){
+            sql = sql +" AND user_id = :userID ";
+            map.put("userID", orderQueryParams.getUserID());
+        }
+        return  sql;
     }
 }
