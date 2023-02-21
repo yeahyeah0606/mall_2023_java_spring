@@ -18,7 +18,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
     @PostMapping("/users/{userID}/orders")
-    public ResponseEntity<?> CreateOrder(@PathVariable Integer userID,
+    public ResponseEntity<?> createOrder(@PathVariable Integer userID,
                                          @RequestBody @Valid CreateOrderRequest createOrderRequest){
         Integer orderID = orderService.createOrder(userID, createOrderRequest);
 
