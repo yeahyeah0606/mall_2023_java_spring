@@ -4,6 +4,7 @@ import com.tina.mall2023.dao.OrderDao;
 import com.tina.mall2023.dao.ProductDao;
 import com.tina.mall2023.dto.BuyItem;
 import com.tina.mall2023.dto.CreateOrderRequest;
+import com.tina.mall2023.model.Order;
 import com.tina.mall2023.model.OrderItem;
 import com.tina.mall2023.model.Product;
 import com.tina.mall2023.service.OrderService;
@@ -47,5 +48,14 @@ public class OrderServiceImpl implements OrderService {
         orderDao.createOrderItems(orderID, orderItemList);
 
         return orderID;
+    }
+
+    @Override
+    public Order getOrderById(Integer orderID) {
+        Order order = orderDao.getOrderById(orderID);
+        List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderID(orderID);
+
+        order.setOrderItemList(orderItemList);
+        return order;
     }
 }

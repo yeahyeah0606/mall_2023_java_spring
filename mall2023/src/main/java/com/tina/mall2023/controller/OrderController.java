@@ -1,6 +1,7 @@
 package com.tina.mall2023.controller;
 
 import com.tina.mall2023.dto.CreateOrderRequest;
+import com.tina.mall2023.model.Order;
 import com.tina.mall2023.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ public class OrderController {
                                          @RequestBody @Valid CreateOrderRequest createOrderRequest){
         Integer orderID = orderService.createOrder(userID, createOrderRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderID);
+        Order order = orderService.getOrderById(orderID);
+        return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 }
