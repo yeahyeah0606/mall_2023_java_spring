@@ -26,7 +26,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Integer createOrder(Integer userID, Integer totalAmount) {
-        String sql = "INSERT INTO `order` (user_id, total_amount, created_date, last_modified_date) "+
+        String sql = "INSERT INTO mall.`order` (user_id, total_amount, created_date, last_modified_date) "+
                 "VALUES (:userID, :totalAmount, :createdDate, :lastModifiedDate)";
 
         Map<String, Object> map =  new HashMap<>();
@@ -40,8 +40,8 @@ public class OrderDaoImpl implements OrderDao {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         npjt.update(sql, new MapSqlParameterSource(map), keyHolder);
 
-        int orderID = keyHolder.getKey().intValue();
-        return orderID;
+        //int orderID = keyHolder.getKey().intValue();
+        return keyHolder.getKey().intValue();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class OrderDaoImpl implements OrderDao {
 //        }
 
         // 使用 batchUpdate 一次加入數據，效率較高
-        String sql = "INSERT INTO order_item (order_id, product_id, quantity, amount )" +
+        String sql = "INSERT INTO mall.order_item (order_id, product_id, quantity, amount )" +
                 "VALUES (:orderID, :productID, :quantity, :amount)";
         MapSqlParameterSource[] parameterSources = new MapSqlParameterSource[orderItemList.size()];
         for (int i = 0; i < orderItemList.size(); i++){
@@ -78,7 +78,7 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public Order getOrderById(Integer orderID) {
         String sql="SELECT order_id, user_id, total_amount, created_date, last_modified_date " +
-                "FROM `order` WHERE order_id = :orderID ";
+                "FROM mall.`order` WHERE order_id = :orderID ";
         Map<String, Object> map = new HashMap<>();
         map.put("orderID", orderID);
         List<Order> orderList = npjt.query(sql, map, new OrderRowMapper());
@@ -93,31 +93,31 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public List<OrderItem> getOrderItemsByOrderID(Integer orderID) {
         String sql ="SELECT oi.order_item_id, oi.order_id, oi.product_id, oi.quantity, oi.amount, p.product_name, p.image_url " +
-                "FROM order_item as oi " +
-                "LEFT JOIN product as p ON oi.product_id = p.product_id " +
+                "FROM mall.order_item as oi " +
+                "LEFT JOIN mall.product as p ON oi.product_id = p.product_id " +
                 "WHERE oi.order_id = :orderID" ;
 
         Map<String, Object> map = new HashMap<>();
         map.put("orderID", orderID);
 
-        List<OrderItem> orderItemList = npjt.query(sql, map, new OrderItemRowMapper());
-        return orderItemList;
+        //List<OrderItem> orderItemList = npjt.query(sql, map, new OrderItemRowMapper());
+        return npjt.query(sql, map, new OrderItemRowMapper());
     }
 
     @Override
     public Integer countOrder(OrderQueryParams orderQueryParams) {
-        String sql = "SELECT count(*) FROM `order` WHERE 1=1 ";
+        String sql = "SELECT count(*) FROM mall.`order` WHERE 1=1 ";
         Map<String, Object> map = new HashMap<>();
         // 查詢條件
         sql = addFilteringSql(sql, map, orderQueryParams);
 
-        Integer total = npjt.queryForObject(sql, map, Integer.class);
-        return total;
+        //Integer total = npjt.queryForObject(sql, map, Integer.class);
+        return  npjt.queryForObject(sql, map, Integer.class);
     }
 
     @Override
     public List<Order> getOrders(OrderQueryParams orderQueryParams) {
-        String sql = "SELECT order_id, user_id, total_amount, created_date, last_modified_date FROM `order` WHERE 1=1 ";
+        String sql = "SELECT order_id, user_id, total_amount, created_date, last_modified_date FROM mall.`order` WHERE 1=1 ";
         Map<String, Object> map = new HashMap<>();
         // 查詢條件
         sql = addFilteringSql(sql, map, orderQueryParams);
@@ -129,8 +129,8 @@ public class OrderDaoImpl implements OrderDao {
         map.put("offset", orderQueryParams.getOffset());
 
 
-        List<Order> orderList = npjt.query(sql, map, new OrderRowMapper());
-        return orderList;
+        //List<Order> orderList = npjt.query(sql, map, new OrderRowMapper());
+        return npjt.query(sql, map, new OrderRowMapper());
     }
 
     private String addFilteringSql(String sql, Map<String, Object> map, OrderQueryParams orderQueryParams){

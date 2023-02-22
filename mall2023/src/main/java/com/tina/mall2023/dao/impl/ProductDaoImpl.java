@@ -1,6 +1,5 @@
 package com.tina.mall2023.dao.impl;
 
-import com.tina.mall2023.constant.ProductCategory;
 import com.tina.mall2023.dao.ProductDao;
 import com.tina.mall2023.dto.ProductQueryParams;
 import com.tina.mall2023.dto.ProductRequest;
@@ -25,20 +24,20 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public Integer countProduct(ProductQueryParams productQueryParams) {
-        String sql = "SELECT count(*) FROM product WHERE 1=1";
+        String sql = "SELECT count(*) FROM mall.product WHERE 1=1";
         Map<String, Object> map = new HashMap<>();
 
         // 查詢條件
         sql =addFilteringSql(sql, map, productQueryParams);
-        Integer total = npjt.queryForObject(sql, map, Integer.class);
-        return  total;
+        //Integer total = npjt.queryForObject(sql, map, Integer.class);
+        return   npjt.queryForObject(sql, map, Integer.class);
     }
 
     @Override
     public List<Product> getProducts(ProductQueryParams productQueryParams) {
         String sql ="SELECT product_id,product_name, category, image_url," +
                 " price, stock, description, created_date, last_modified_date  " +
-                "from product where 1=1";
+                "from mall.product where 1=1";
         Map<String, Object> map = new HashMap<>();
 
         // 查詢條件
@@ -52,15 +51,15 @@ public class ProductDaoImpl implements ProductDao {
         map.put("limit", productQueryParams.getLimit());
         map.put("offset", productQueryParams.getOffset());
 
-        List<Product> productList = npjt.query(sql, map, new ProductRowMapper());
-        return productList;
+        //List<Product> productList = npjt.query(sql, map, new ProductRowMapper());
+        return npjt.query(sql, map, new ProductRowMapper());
     }
 
     @Override
     public Product getProductById(Integer productID) {
         String sql ="SELECT product_id,product_name, category, image_url," +
                 " price, stock, description, created_date, last_modified_date  " +
-                "from product where product_id =:productID";
+                "from mall.product where product_id =:productID";
         Map<String, Object> map = new HashMap<>();
         map.put("productID", productID);
         List<Product> productList = npjt.query(sql, map, new ProductRowMapper());
@@ -73,7 +72,7 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public Integer createProduct(ProductRequest productRequest) {
-        String sql ="INSERT INTO product(product_name, category, image_url,price, stock," +
+        String sql ="INSERT INTO mall.product(product_name, category, image_url,price, stock," +
                 "  description, created_date, last_modified_date)  " +
                 "VALUES ( :productName, :category, :imageUrl, :price, :stock, :description, " +
                 ":createdDate, :lastModifiedDate)";
@@ -92,13 +91,13 @@ public class ProductDaoImpl implements ProductDao {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         npjt.update(sql, new MapSqlParameterSource(map), keyHolder);
-        int productID = keyHolder.getKey().intValue();
-        return productID;
+        //int productID = keyHolder.getKey().intValue();
+        return keyHolder.getKey().intValue();
     }
 
     @Override
     public void updateProduct(Integer productID, ProductRequest productRequest) {
-        String sql ="UPDATE product SET product_name=:productName, category=:category, image_url=:imageUrl, "+
+        String sql ="UPDATE mall.product SET product_name=:productName, category=:category, image_url=:imageUrl, "+
                 "price=:price, stock=:stock, description=:description, last_modified_date=:lastModifiedDate " +
                 "WHERE product_id=:productID";
         Map<String, Object> map = new HashMap<>();
@@ -117,7 +116,7 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public void updateStock(Integer productID, Integer stock) {
-        String sql = "UPDATE product SET stock = :stock, last_modified_date = :lastModifiedDate" +
+        String sql = "UPDATE mall.product SET stock = :stock, last_modified_date = :lastModifiedDate" +
                 " WHERE product_id = :productID ";
         Map<String, Object> map = new HashMap<>();
         map.put("productID", productID);
@@ -128,13 +127,9 @@ public class ProductDaoImpl implements ProductDao {
 
     }
 
-    public void setNpjt(NamedParameterJdbcTemplate npjt) {
-        this.npjt = npjt;
-    }
-
     @Override
     public void deleteProductById(Integer productID) {
-        String sql = "DELETE FROM product WHERE product_id=:productID";
+        String sql = "DELETE FROM mall.product WHERE product_id=:productID";
         Map<String, Object> map = new HashMap<>();
         map.put("productID", productID);
         npjt.update(sql, map);
